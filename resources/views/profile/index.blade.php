@@ -7,7 +7,7 @@
 
                 <div class="col-auto d-flex align-items-center">
                     <div class="position-relative">
-                        <img id="profileImage" src="{{ asset('assets/images/profile') }}/{{ Auth::user()->image }}"
+                        <img id="profileImage" src="{{ asset('storage/images/profile') }}/{{ Auth::user()->image }}"
                             alt="Profile picture Gusti Purwanto" class="rounded-circle" width="100" height="100"
                             style="cursor: pointer;">
 

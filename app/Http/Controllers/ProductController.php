@@ -11,6 +11,7 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -77,9 +78,8 @@ class ProductController extends Controller
 
         $image = $request->file('gambar');
         $imageName = str_replace(' ', '_', strtolower($request->nama_barang)) . '.' . $image->getClientOriginalExtension();
-        $imagePath = public_path('assets/images/product');
-        $image->move($imagePath, $imageName);
-
+        // $image->move(public_path('images/product'), $imageName);
+        Storage::disk('public')->putFileAs('images/product', $image, $imageName);
         Product::create([
             'product_category' => $request->kategori,
             'product_name' => $request->nama_barang,
