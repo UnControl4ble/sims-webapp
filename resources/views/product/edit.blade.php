@@ -77,7 +77,7 @@
                     style="cursor: pointer; position: relative; padding: 100px;">
 
                     <img id="preview-image"
-                        src="{{ $product->product_image ? asset('assets/images/product/' . $product->product_image) : '' }}"
+                        src="{{ $product->product_image ? asset('storage/images/product/' . $product->product_image) : '' }}"
                         alt="Preview Image"
                         style="max-width: 80px; height: 80px; display: {{ $product->product_image ? 'block' : 'none' }}; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" />
 
