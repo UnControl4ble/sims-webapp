@@ -136,14 +136,6 @@ class ProductController extends Controller
         );
 
         $product = Product::findOrFail($id);
-
-        if ($request->hasFile('gambar') || $product->product_name !== $request->nama_barang) {
-            $oldImagePath = public_path('assets/images/product/' . $product->product_image);
-            if (file_exists($oldImagePath) && $product->product_image) {
-                unlink($oldImagePath);
-            }
-        }
-
         $product->product_category = $request->kategori;
         $product->product_name = $request->nama_barang;
         $product->product_buying_price = str_replace('.', '', $request->harga_beli);
@@ -151,24 +143,17 @@ class ProductController extends Controller
         $product->product_quantity = $request->stok_barang;
 
         if ($request->hasFile('gambar')) {
+            $oldImagePath = public_path('storage/images/product/' . $product->product_image); // Adjust path to storage
+            if (file_exists($oldImagePath) && $product->product_image) {
+                unlink($oldImagePath); // Delete old image
+            }
+
             $image = $request->file('gambar');
             $imageName = str_replace(' ', '_', strtolower($request->nama_barang)) . '.' . $image->getClientOriginalExtension();
-            $imagePath = public_path('assets/images/product');
-            $image->move($imagePath, $imageName);
+
+            // Store the new image using Storage facade
+            Storage::disk('public')->putFileAs('images/product', $image, $imageName);
             $product->product_image = $imageName;
-        } else {
-            if ($product->product_image) {
-                $extension = pathinfo($product->product_image, PATHINFO_EXTENSION);
-                $newImageName = str_replace(' ', '_', strtolower($request->nama_barang)) . '.' . $extension;
-                $oldImagePath = public_path('assets/images/product/' . $product->product_image);
-                $newImagePath = public_path('assets/images/product/' . $newImageName);
-
-                if (file_exists($oldImagePath)) {
-                    rename($oldImagePath, $newImagePath);
-                }
-
-                $product->product_image = $newImageName;
-            }
         }
 
         $product->save();
